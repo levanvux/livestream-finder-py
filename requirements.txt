@@ -16,3 +16,6 @@ python-dotenv>=1.0.0
 
 # Google Gen AI SDK
 google-genai>=1.0.0
+
+# Streamlit
+streamlit>=1.35.0
