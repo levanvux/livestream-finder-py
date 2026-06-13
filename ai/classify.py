@@ -1,4 +1,4 @@
-from gemini_client import client, DEFAULT_MODEL
+from ai.gemini import Gemini
 import json
 
 
@@ -60,10 +60,8 @@ Example:
 }}
 """
 
-    response = client.models.generate_content(
-        model=DEFAULT_MODEL,
-        contents=prompt,
-    )
+    gemini = Gemini("gemini-3.5-flash")
+    response = gemini.generate(prompt)
 
     try:
         text = response.text.strip()
