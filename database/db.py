@@ -8,14 +8,16 @@ livestreams = Table(
     "livestreams",
     metadata,
     Column("id", Integer, primary_key=True),
-    Column("title", String),
+    Column("title", String, nullable=False),
     Column("platform", String),
     Column("description", Text),
-    Column("url", String),
-    Column("score", Integer),
+    Column("url", String, unique=True),
+    Column("start_time", DateTime),
+    Column("score", Integer, default=0),
     Column("industry", String),
     Column("language", String),
     Column("buyer_persona", String),
+    Column("created_at", DateTime, server_default=func.now()),
 )
 
 metadata.create_all(engine)
