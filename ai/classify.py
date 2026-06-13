@@ -1,5 +1,8 @@
 from ai.gemini import Gemini
+import time
 import json
+
+exhausted_models = set()
 
 
 def classify_event(title: str, description: str):
@@ -60,28 +63,89 @@ Example:
 }}
 """
 
-    gemini = Gemini("gemini-3.5-flash")
-    response = gemini.generate(prompt)
+    gemini_models = [
+        "gemini-2.5-flash",
+        "gemini-3.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-3.1-flash-lite",
+    ]
 
-    try:
-        text = response.text.strip()
+    for model in gemini_models:
 
-        if text.startswith("```json"):
-            text = text.replace("```json", "", 1)
+        if model in exhausted_models:
+            continue
 
-        if text.endswith("```"):
-            text = text[:-3]
+        for retry in range(2):
 
-        text = text.strip()
+            try:
+                print(f"🤖 Gemini: {model} " f"(attempt {retry + 1}/2)")
 
-        return json.loads(text)
+                gemini = Gemini(model)
+                response = gemini.generate(prompt)
 
-    except Exception:
+                try:
+                    text = response.text.strip()
 
-        return {
-            "industry": None,
-            "language": None,
-            "buyer_persona": None,
-            "score": 0,
-            "reason": response.text,
-        }
+                    if text.startswith("```json"):
+                        text = text.replace("```json", "", 1)
+
+                    if text.endswith("```"):
+                        text = text[:-3]
+
+                    text = text.strip()
+
+                    return json.loads(text)
+
+                except Exception:
+
+                    return {
+                        "industry": None,
+                        "language": None,
+                        "buyer_persona": None,
+                        "score": 0,
+                        "reason": response.text,
+                    }
+            except Exception as e:
+
+                error = str(e)
+
+                if "RESOURCE_EXHAUSTED" in error:
+
+                    print(f"⚠️ Quota exhausted on {model}")
+
+                    time.sleep(61)
+
+                    if retry == 1:
+                        exhausted_models.add(model)
+
+                    continue
+
+                print(f"❌ Error on {model}: {error}")
+
+                break
+
+    return {
+        "industry": None,
+        "language": None,
+        "buyer_persona": None,
+        "score": 0,
+        "reason": "Gemini models exhausted or failed. Try again tomorrow.",
+    }
+
+
+# === FOR TESTING PURPOSE ===
+
+# print(
+#     classify_event(
+#         " 24/7 Live Business Website & App Development Promo | Website Starting ₹8,000 ",
+#         "Welcome to our 24/7 live promo stream.We provide professional Website Development, Mobile App Development, CRM Software, SaaS Solutions and Custom Business Software for small businesses, startups, consultants, doctors, coaching classes, manufacturers and service providers.✅ Business Website Development  ✅ Mobile App Development  ✅ CRM / Custom Software  ✅ E-commerce Website  ✅ Hosting, Domain & SSL Setup  ✅ WhatsApp Inquiry Website  ",
+#     )
+# )
+
+
+# print(
+#     classify_event(
+#         " How to walk and dance as a kid ",
+#         "I made this video for fun. Watch if u are a kid :) ",
+#     )
+# )

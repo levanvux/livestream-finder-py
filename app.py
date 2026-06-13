@@ -1,4 +1,3 @@
-import time
 from crawler.meetup import crawl_meetup
 from crawler.youtube import crawl_youtube_live
 from ai.classify import classify_event
@@ -13,7 +12,6 @@ def process_event(event: dict):
     )
 
     event.update(classify_result)
-    time.sleep(12)
 
     save_event(event)
 
@@ -32,8 +30,7 @@ def process_event(event: dict):
 
 def main():
     #  Định nghĩa danh sách các từ khóa cần tìm kiếm
-    # keywords = ["AI", "Recruiting", "Startup", "HR", "SaaS", "Fintech"]
-    keywords = ["SaaS", "Fintech"]
+    keywords = ["AI", "Recruiting", "Startup", "HR", "SaaS", "Fintech"]
 
     # meetup_events = crawl_meetup(keywords)
 
