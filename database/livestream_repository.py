@@ -1,27 +1,46 @@
 from sqlalchemy import insert, select, update, delete
+from sqlalchemy.exc import IntegrityError
 
 from database.db import engine, livestreams
 
 
-def save_event(event: dict):
+def save_event(event: dict) -> bool:
     """
-    Lưu 1 livestream vào database
+    Lưu 1 livestream vào database.
+
+    Returns:
+        True  -> lưu thành công
+        False -> livestream đã tồn tại hoặc lỗi
     """
 
-    with engine.begin() as conn:
+    try:
+        with engine.begin() as conn:
 
-        stmt = insert(livestreams).values(
-            title=event.get("title"),
-            platform=event.get("platform"),
-            description=event.get("description"),
-            url=event.get("url"),
-            score=event.get("score", 0),
-            industry=event.get("industry"),
-            language=event.get("language"),
-            buyer_persona=event.get("buyer_persona"),
-        )
+            stmt = insert(livestreams).values(
+                title=event["title"],
+                platform=event.get("platform"),
+                description=event.get("description"),
+                url=event["url"],
+                keyword=event.get("keyword"),
+                start_time=event.get("start_time"),
+                score=event.get("score"),
+                industry=event.get("industry"),
+                language=event.get("language"),
+                buyer_persona=event.get("buyer_persona"),
+                suggested_comment=event.get("suggested_comment"),
+            )
 
-        conn.execute(stmt)
+            conn.execute(stmt)
+
+        return True
+
+    except IntegrityError:
+        print(f"⚠️ Livestream đã tồn tại: {event.get('url')}")
+        return False
+
+    except Exception as e:
+        print(f"❌ Lỗi khi lưu livestream: {e}")
+        return False
 
 
 def get_all_events():
@@ -60,7 +79,9 @@ def get_event_by_url(url: str):
         return conn.execute(stmt).fetchone()
 
 
-def update_score(event_id: int, score: int):
+def update_score(
+    event_id: int,
+):
     """
     Cập nhật điểm AI
     """
@@ -74,8 +95,8 @@ def update_score(event_id: int, score: int):
         conn.execute(stmt)
 
 
-def update_classification(
-    event_id: int, industry: str, language: str, buyer_persona: str
+def update_classification_by_url(
+    url: str, industry: str, language: str, buyer_persona: str, score: int
 ):
     """
     Cập nhật kết quả phân loại AI
@@ -85,20 +106,43 @@ def update_classification(
 
         stmt = (
             update(livestreams)
-            .where(livestreams.c.id == event_id)
-            .values(industry=industry, language=language, buyer_persona=buyer_persona)
+            .where(livestreams.c.url == url)
+            .values(
+                industry=industry,
+                language=language,
+                buyer_persona=buyer_persona,
+                score=score or 0,
+            )
         )
 
         conn.execute(stmt)
 
 
-def delete_event(event_id: int):
+def update_suggested_comment_by_url(url: str, suggested_comment: str):
+    """
+    Cập nhật suggested_comment cho livestream
+    """
+
+    with engine.begin() as conn:
+
+        stmt = (
+            update(livestreams)
+            .where(livestreams.c.url == url)
+            .values(suggested_comment=suggested_comment)
+        )
+
+        conn.execute(stmt)
+
+
+def delete_event_by_url(url: str) -> bool:
     """
     Xóa livestream
     """
 
     with engine.begin() as conn:
 
-        stmt = delete(livestreams).where(livestreams.c.id == event_id)
+        stmt = delete(livestreams).where(livestreams.c.url == url)
 
-        conn.execute(stmt)
+        result = conn.execute(stmt)
+
+        return result.rowcount > 0
