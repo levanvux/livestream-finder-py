@@ -12,11 +12,13 @@ livestreams = Table(
     Column("platform", String),
     Column("description", Text),
     Column("url", String, unique=True),
+    Column("keyword", String),
     Column("start_time", DateTime),
     Column("score", Integer, default=0),
     Column("industry", String),
     Column("language", String),
     Column("buyer_persona", String),
+    Column("suggested_comment", Text),
     Column("created_at", DateTime, server_default=func.now()),
 )
 
