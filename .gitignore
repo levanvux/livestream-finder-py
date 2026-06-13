@@ -1,0 +1,85 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.env
+
+# VSCode
+.vscode/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# Streamlit
+.streamlit/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Cache
+.cache/
+
+# Pytest
+.pytest_cache/
+
+# Build
+dist/
+build/
+
+# Secrets
+.env.local
+.env.production# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.env
+
+# VSCode
+.vscode/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# Streamlit
+.streamlit/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Cache
+.cache/
+
+# Pytest
+.pytest_cache/
+
+# Build
+dist/
+build/
+
+# Secrets
+.env.local
+.env.production
