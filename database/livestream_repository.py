@@ -79,22 +79,6 @@ def get_event_by_url(url: str):
         return conn.execute(stmt).fetchone()
 
 
-def update_score(
-    event_id: int,
-):
-    """
-    Cập nhật điểm AI
-    """
-
-    with engine.begin() as conn:
-
-        stmt = (
-            update(livestreams).where(livestreams.c.id == event_id).values(score=score)
-        )
-
-        conn.execute(stmt)
-
-
 def update_classification_by_url(
     url: str, industry: str, language: str, buyer_persona: str, score: int
 ):
