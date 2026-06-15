@@ -2,6 +2,35 @@ from crawler.meetup import crawl_meetup
 from crawler.youtube import crawl_youtube_live
 from ai.classify import classify_event
 from database.livestream_repository import save_event
+from youtube.livechat import get_live_chat_id, send_message
+
+
+def try_comment(event: dict):
+    # Hiện tại chỉ có thể comment YouTube
+    if event["platform"] != "YouTube":
+        return
+
+    # Chỉ comment vào livestream được AI đánh giá là chất lượng cao
+    if event.get("score") < 80:
+        return
+
+    comment = event.get("suggested_comment")
+
+    if not comment:
+        return
+
+    chat_id = get_live_chat_id(event["url"])
+
+    if not chat_id:
+        print("No active chat")
+        return
+
+    try:
+        send_message(chat_id, comment)
+        print("Comment sent:", comment)
+
+    except Exception as e:
+        print("Comment failed:", e)
 
 
 def process_event(event: dict):
@@ -14,6 +43,8 @@ def process_event(event: dict):
     event.update(classify_result)
 
     save_event(event)
+
+    try_comment(event)
 
     print("-" * 50)
     print(f"Title: {event['title']}")
@@ -38,15 +69,7 @@ def main():
 
     # for event in meetup_events:
 
-    #     print("-" * 50)
-
-    #     print(f"Title: {event['title']}")
-
-    #     print(f"Platform: {event['platform']}")
-
-    #     print(f"URL: {event['url']}")
-
-    #     print(f"Keyword: {event['keyword']}")
+    #     process_event(event)
 
     # print(f"\n🎉 TỔNG SỐ EVENTS MEETUP TÌM ĐƯỢC: {len(meetup_events)}")
 

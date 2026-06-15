@@ -7,24 +7,26 @@ load_dotenv()
 youtube = build("youtube", "v3", developerKey=os.getenv("YOUTUBE_API_KEY"))
 
 
-def search_live(keyword):
+def search_live(keyword, limit):
 
     response = (
         youtube.search()
-        .list(part="snippet", q=keyword, type="video", eventType="live", maxResults=25)
+        .list(
+            part="snippet", q=keyword, type="video", eventType="live", maxResults=limit
+        )
         .execute()
     )
 
     return response
 
 
-def crawl_youtube_live(keywords):
+def crawl_youtube_live(keywords, limit):
 
     events = []
 
     for keyword in keywords:
 
-        response = search_live(keyword)
+        response = search_live(keyword, limit)
 
         for item in response["items"]:
             print(item)

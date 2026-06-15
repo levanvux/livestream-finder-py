@@ -1,5 +1,5 @@
 from urllib.parse import urlparse, parse_qs
-from auth import get_youtube_client
+from youtube.auth import get_youtube_client
 
 
 def get_live_chat_id(video_url: str):
@@ -21,7 +21,6 @@ def get_live_chat_id(video_url: str):
         return None
 
     details = items[0].get("liveStreamingDetails", {})
-    print(response)
 
     return details.get("activeLiveChatId")
 
@@ -47,11 +46,3 @@ def send_message(chat_id: str, text: str):
     )
 
     return response
-
-
-print(
-    send_message(
-        get_live_chat_id("https://www.youtube.com/watch?v=8vaOW_2EpLc"),
-        "hi",
-    )
-)
