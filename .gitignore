@@ -89,3 +89,6 @@ client_secret.json
 
 # OAuth Client Token
 token.json
+
+# Result Sheet
+*.xlsx
