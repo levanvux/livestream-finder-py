@@ -63,7 +63,16 @@ def process_event(event: dict):
 
 def main():
     #  Định nghĩa danh sách các từ khóa cần tìm kiếm
-    keywords = ["AI", "Recruiting", "Startup", "HR", "SaaS", "Fintech"]
+    keywords = [
+        "AI",
+        "Recruiting",
+        "Sale",
+        "Product",
+        "Startup",
+        "HR",
+        "SaaS",
+        "Fintech",
+    ]
 
     # meetup_events = crawl_meetup(keywords)
 
