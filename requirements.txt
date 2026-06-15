@@ -1,5 +1,7 @@
 # DATABASE
 SQLAlchemy>=2.0.0
+python-dotenv>=1.0
+psycopg2-binary>=2.9
 
 # CRAWLER & SCRAPER
 requests>=2.31.0
@@ -7,6 +9,8 @@ beautifulsoup4>=4.12.0
 
 # --- GOOGLE & YOUTUBE API ---
 google-api-python-client>=2.100.0
+google-auth-oauthlib>=1.4.0
+google-auth-httplib2>=0.4.0
 
 # --- AI SCORING ---
 openai>=1.0.0
