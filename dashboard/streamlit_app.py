@@ -10,43 +10,49 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("🎯 Livestream Finder")
-st.write("Tìm livestream có khách hàng tiềm năng và đánh giá bằng AI.")
+st.title("🎯 Tool tìm livestream có khách hàng tiềm năng và đánh giá bằng AI")
 
-# === Sidebar ===
+# === Search area ===
 
-st.sidebar.header("Search Options")
+with st.form("search_form"):
 
-platform = st.sidebar.selectbox(
-    "Platform",
-    [
-        "YouTube",
-    ],
-)
+    col1, col2, col3 = st.columns([1.5, 1, 1])
 
-keywords_text = st.sidebar.text_area(
-    "Keywords (mỗi dòng là 1 keyword)",
-    value="""AI
-Recruiting
-Startup
-HR
-SaaS
+    with col1:
+        keywords_text = st.text_area(
+            "Keywords (mỗi dòng là 1 keyword)",
+            value="""Startup
+Sale
 Fintech""",
-)
+            height=150,
+        )
 
-enable_ai = st.sidebar.checkbox(
-    "AI Classification",
-    value=True,
-)
+    with col2:
+        platform = st.selectbox(
+            "Nền tảng",
+            ["YouTube"],
+        )
 
-limit = st.sidebar.number_input(
-    "Max Results",
-    min_value=1,
-    max_value=100,
-    value=20,
-)
+        enable_ai = st.checkbox(
+            "Đánh giá bằng AI",
+            value=True,
+        )
 
-search_btn = st.sidebar.button("Search Livestreams")
+    with col3:
+        limit = st.number_input(
+            "Số lượng",
+            min_value=1,
+            max_value=100,
+            value=5,
+        )
+
+        st.write("")
+        st.write("")
+
+        search_btn = st.form_submit_button(
+            "🔍 Tìm kiếm",
+            use_container_width=True,
+        )
 
 # === Main ===
 
@@ -56,69 +62,92 @@ if search_btn:
         keyword.strip() for keyword in keywords_text.splitlines() if keyword.strip()
     ]
 
-    st.write("### Keywords")
+    st.write("### TỪ KHÓA")
 
     st.write(keywords)
 
     # === Crawl ===
-    with st.spinner("Crawling livestreams..."):
+    with st.spinner("Đang lấy dữ liệu của các livestream..."):
 
         if platform == "YouTube":
 
-            events = crawl_youtube_live(keywords)
+            events = crawl_youtube_live(keywords, limit)
 
         else:
             events = []
 
     events = events[:limit]
 
-    st.success(f"Found {len(events)} livestreams")
+    st.success(f"Đã tìm thấy {len(events)} livestreams")
 
     results = []
 
     progress = st.progress(0)
+    status = st.empty()
+
+    total = len(events)
 
     for index, event in enumerate(events):
+
+        current = index
+
+        if current == 0:
+            status.info(f"⏳ Đang tải thông tin các livestreams...")
+        else:
+            status.info(f"⏳ Đã tải thông tin của {current}/{total} livestreams...")
 
         if enable_ai:
 
             ai_result = classify_event(
                 event["title"],
-                event.get(
-                    "description",
-                    "",
-                ),
+                event.get("description", ""),
             )
 
             event.update(ai_result)
 
-        try:
-            save_event(event)
+            try:
+                save_event(event)
+            except Exception:
+                pass
 
-        except Exception:
-            pass
+            results.append(event)
 
-        results.append(event)
+            progress.progress((current + 1) / total)
 
-        progress.progress((index + 1) / len(events))
+        status.success(f"✅ Đã xử lý xong {total} livestreams")
 
     # === Dataframe ===
 
-    st.write("## Results")
+    st.write("## KẾT QUẢ")
 
     df = pd.DataFrame(results)
+
+    df = df.rename(
+        columns={
+            "title": "Tiêu đề",
+            "platform": "Nền tảng",
+            "keyword": "Từ khóa",
+            "industry": "Ngành nghề",
+            "language": "Ngôn ngữ",
+            "buyer_persona": "Đối tượng khách hàng",
+            "score": "Điểm tiềm năng",
+            "url": "Link",
+            "suggested_comment": "Bình luận được gửi vào livestream",
+        }
+    )
 
     show_columns = [
         col
         for col in [
-            "title",
-            "platform",
-            "keyword",
-            "industry",
-            "language",
-            "buyer_persona",
-            "score",
-            "url",
+            "Tiêu đề",
+            "Nền tảng",
+            "Từ khóa",
+            "Ngành nghề",
+            "Ngôn ngữ",
+            "Đối tượng khách hàng",
+            "Điểm tiềm năng",
+            "Link",
+            "Bình luận được gửi vào livestream",
         ]
         if col in df.columns
     ]
@@ -130,24 +159,30 @@ if search_btn:
 
     # === Detail View ===
 
-    st.write("## Livestream Details")
+    st.write("## CHI TIẾT")
 
     for event in results:
 
-        with st.expander(f"{event.get('title')} | Score: {event.get('score', 0)}"):
+        with st.expander(
+            f"{event.get('title')} | Điểm tiềm năng: {event.get('score')}/100"
+        ):
 
-            st.write(f"**Platform:** {event.get('platform')}")
+            st.write(f"**Nền tảng:** {event.get('platform')}")
 
-            st.write(f"**Keyword:** {event.get('keyword')}")
+            st.write(f"**Từ khóa:** {event.get('keyword')}")
 
-            st.write(f"**Industry:** {event.get('industry')}")
+            st.write(f"**Ngành nghề:** {event.get('industry')}")
 
-            st.write(f"**Language:** {event.get('language')}")
+            st.write(f"**Điểm tiềm năng:** {event.get('score')}")
 
-            st.write(f"**Buyer Persona:** {event.get('buyer_persona')}")
+            st.write(f"**Ngôn ngữ:** {event.get('language')}")
 
-            st.write(f"**Score:** {event.get('score')}")
+            st.write(f"**Đối tượng khách hàng:** {event.get('buyer_persona')}")
 
-            st.write(f"**Reason:** {event.get('reason')}")
+            st.write(f"**Lý do đánh giá từ AI:** {event.get('reason')}")
 
-            st.write(f"**URL:** {event.get('url')}")
+            st.write(f"**Link livestream:** {event.get('url')}")
+
+            st.write(
+                f"**Bình luận được gửi vào livestream:** {event.get('suggested_comment')}"
+            )
