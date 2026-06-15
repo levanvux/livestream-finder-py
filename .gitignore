@@ -83,3 +83,9 @@ build/
 # Secrets
 .env.local
 .env.production
+
+# OAuth Client Secret
+client_secret.json
+
+# OAuth Client Token
+token.json
