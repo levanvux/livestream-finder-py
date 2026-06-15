@@ -1,6 +1,11 @@
 from sqlalchemy import *
+import os
+from dotenv import load_dotenv
 
-engine = create_engine("sqlite:///livestream.db")
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+engine = create_engine(DATABASE_URL)
 
 metadata = MetaData()
 
@@ -13,7 +18,7 @@ livestreams = Table(
     Column("description", Text),
     Column("url", String, unique=True),
     Column("keyword", String),
-    Column("start_time", DateTime),
+    Column("start_time", String),
     Column("score", Integer, default=0),
     Column("industry", String),
     Column("language", String),

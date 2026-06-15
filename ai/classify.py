@@ -26,6 +26,7 @@ Your task:
 3. Identify buyer persona
 4. Score business opportunity from 0-100
 5. Explain score
+6. Generate a comment as if you are a real viewer watching the livestream
 
 Target buyers include:
 - Founder
@@ -35,6 +36,17 @@ Target buyers include:
 - HR Manager
 - Startup Owner
 - Business Decision Maker
+
+The suggested_comment should:
+- Sound spontaneous and human
+- React to something likely being discussed
+- Show genuine curiosity or experience
+- Avoid generic praise
+- Avoid sounding like AI
+- Avoid marketing language
+- Avoid excessive enthusiasm
+- Be 1 sentence only
+- Maximum 20 words
 
 Scoring guide:
 
@@ -60,6 +72,7 @@ Example:
     "buyer_persona": "Recruiter, HR Manager",
     "score": 92,
     "reason": "Audience contains hiring decision makers."
+    "suggested_comment": "What hiring challenges are you seeing most often this year?"
 }}
 """
 
@@ -104,6 +117,7 @@ Example:
                         "buyer_persona": None,
                         "score": 0,
                         "reason": response.text,
+                        "suggested_comment": None,
                     }
             except Exception as e:
 
@@ -130,6 +144,7 @@ Example:
         "buyer_persona": None,
         "score": 0,
         "reason": "Gemini models exhausted or failed. Try again tomorrow.",
+        "suggested_comment": None,
     }
 
 

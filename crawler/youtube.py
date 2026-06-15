@@ -27,6 +27,7 @@ def crawl_youtube_live(keywords):
         response = search_live(keyword)
 
         for item in response["items"]:
+            print(item)
 
             video_id = item["id"]["videoId"]
 
@@ -37,6 +38,7 @@ def crawl_youtube_live(keywords):
                     "url": (f"https://youtube.com/watch?v={video_id}"),
                     "description": item["snippet"]["description"],
                     "keyword": keyword,
+                    "start_time": item["snippet"]["publishedAt"],
                 }
             )
 

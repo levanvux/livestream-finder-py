@@ -20,12 +20,14 @@ def process_event(event: dict):
     print(f"Platform: {event['platform']}")
     print(f"URL: {event['url']}")
     print(f"Keyword: {event.get('keyword')}")
+    print(f"Start time: {event.get('start_time')}")
 
     print(f"Industry: {event.get('industry')}")
     print(f"Language: {event.get('language')}")
     print(f"Buyer Persona: {event.get('buyer_persona')}")
     print(f"Score: {event.get('score')}")
     print(f"Reason: {event.get('reason')}")
+    print(f"Suggested comment: {event.get('suggested_comment')}")
 
 
 def main():
