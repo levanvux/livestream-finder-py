@@ -1,6 +1,6 @@
 import pandas as pd
 
-from database.livestream_repository import get_all_events
+from src.database.livestream_repository import get_all_events
 
 
 def export_to_excel(filename="livestreams.xlsx"):
