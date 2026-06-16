@@ -1,4 +1,4 @@
-from ai.gemini import Gemini
+from src.ai.gemini import Gemini
 import time
 import json
 

@@ -1,8 +1,8 @@
-from crawler.meetup import crawl_meetup
-from crawler.youtube import crawl_youtube_live
-from ai.classify import classify_event
-from database.livestream_repository import save_event
-from youtube.livechat import get_live_chat_id, send_message
+from src.crawler.meetup import crawl_meetup
+from src.crawler.youtube import crawl_youtube_live
+from src.ai.classify import classify_event
+from src.database.livestream_repository import save_event
+from src.youtube.livechat import get_live_chat_id, send_message
 
 
 def try_comment(event: dict):
@@ -63,16 +63,7 @@ def process_event(event: dict):
 
 def main():
     #  Định nghĩa danh sách các từ khóa cần tìm kiếm
-    keywords = [
-        "AI",
-        "Recruiting",
-        "Sale",
-        "Product",
-        "Startup",
-        "HR",
-        "SaaS",
-        "Fintech",
-    ]
+    keywords = ["Charity", "Tokenization", "Cross-border payment"]
 
     # meetup_events = crawl_meetup(keywords)
 
@@ -82,7 +73,7 @@ def main():
 
     # print(f"\n🎉 TỔNG SỐ EVENTS MEETUP TÌM ĐƯỢC: {len(meetup_events)}")
 
-    youtube_live_events = crawl_youtube_live(keywords)
+    youtube_live_events = crawl_youtube_live(keywords, 3)
 
     for event in youtube_live_events:
         process_event(event)

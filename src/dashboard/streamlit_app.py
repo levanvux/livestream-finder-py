@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 
-from crawler.youtube import crawl_youtube_live
-from ai.classify import classify_event
-from database.livestream_repository import save_event
+from src.crawler.youtube import crawl_youtube_live
+from src.ai.classify import classify_event
+from src.database.livestream_repository import save_event
 
 st.set_page_config(
     page_title="Livestream Finder",
@@ -21,9 +21,9 @@ with st.form("search_form"):
     with col1:
         keywords_text = st.text_area(
             "Keywords (mỗi dòng là 1 keyword)",
-            value="""Startup
-Sale
-Fintech""",
+            value="""Charity
+Tokenization
+Cross-border payment""",
             height=150,
         )
 

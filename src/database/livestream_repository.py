@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select, update, delete
 from sqlalchemy.exc import IntegrityError
 
-from database.db import engine, livestreams
+from src.database.db import engine, livestreams
 
 
 def save_event(event: dict) -> bool:

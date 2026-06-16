@@ -1,5 +1,5 @@
 from urllib.parse import urlparse, parse_qs
-from youtube.auth import get_youtube_client
+from src.youtube.auth import get_youtube_client
 
 
 def get_live_chat_id(video_url: str):

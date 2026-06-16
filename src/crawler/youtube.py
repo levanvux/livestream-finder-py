@@ -29,8 +29,6 @@ def crawl_youtube_live(keywords, limit):
         response = search_live(keyword, limit)
 
         for item in response["items"]:
-            print(item)
-
             video_id = item["id"]["videoId"]
 
             events.append(

@@ -18,7 +18,7 @@ livestreams = Table(
     Column("description", Text),
     Column("url", String, unique=True),
     Column("keyword", String),
-    Column("start_time", String),
+    Column("start_time", DateTime),
     Column("score", Integer, default=0),
     Column("industry", String),
     Column("language", String),
