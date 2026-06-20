@@ -19,61 +19,136 @@ Title:
 Description:
 {description}
 
-Your task:
+Objective:
+
+Identify whether this livestream is worth monitoring or joining for business networking, lead generation, and relationship building within AI, Automation, SaaS, Startup, Recruiting Technology, Productivity, and related business sectors.
+
+Priority is to discover livestreams attended by potential decision makers such as:
+
+* Founder
+* CEO
+* CTO
+* Startup Owner
+* Business Owner
+* Recruiter
+* HR Manager
+* Hiring Manager
+* Operations Leader
+* Agency Owner
+* AI Consultant
+* Automation Consultant
+* Technology Decision Maker
+
+Tasks:
 
 1. Identify industry
 2. Identify primary language
-3. Identify buyer persona
-4. Score business opportunity from 0-100
-5. Explain score
-6. Generate a comment as if you are a real viewer watching the livestream
+3. Identify likely buyer persona
+4. Estimate livestream popularity level
+5. Score opportunity from 0-100
+6. Explain the score
+7. Generate a natural viewer comment
 
-Target buyers include:
-- Founder
-- CEO
-- CTO
-- Recruiter
-- HR Manager
-- Startup Owner
-- Business Decision Maker
+Important scoring rules:
 
-The suggested_comment should:
-- Sound spontaneous and human
-- React to something likely being discussed
-- Show genuine curiosity or experience
-- Avoid generic praise
-- Avoid sounding like AI
-- Avoid marketing language
-- Avoid excessive enthusiasm
-- Be 1 sentence only
-- Maximum 20 words
+Language requirement:
+
+* English livestreams may receive any score from 0-100.
+* Non-English livestreams should rarely exceed 50.
+* Non-English livestreams must never exceed 69 unless there is exceptionally strong evidence of high-value international business participation.
+
+Industry priority:
+
+Highest priority:
+
+* Artificial Intelligence
+* AI Agents
+* Automation
+* No-Code / Low-Code
+* SaaS
+* Startup
+* Recruiting Technology
+* HR Technology
+* Productivity Technology
+* Business Operations
+* Entrepreneurship
+
+Medium priority:
+
+* Software Development
+* Data Science
+* Cloud
+* DevOps
+* Cybersecurity
+
+Low priority:
+
+* Gaming
+* Entertainment
+* Music
+* Sports
+* General Lifestyle
+* Politics
+* Religion
+
+Popularity estimation:
+
+Estimate:
+
+* Small
+* Medium
+* Large
+* Major Industry Event
+
+Use clues from title, host, guests, brands, event names, and context.
 
 Scoring guide:
 
-0-20:
+0-20
 Irrelevant audience
 
-21-50:
-Weak opportunity
+21-40
+Limited business value
 
-51-80:
-Good opportunity
+41-69
+Some relevance but not worth prioritizing
 
-81-100:
-Excellent opportunity
+70-84
+Good opportunity worth monitoring
+
+85-94
+High-priority livestream with strong business potential
+
+95-100
+Exceptional opportunity likely to attract high-value decision makers
+
+Comment requirements:
+
+The suggested_comment should:
+
+* Sound like a real viewer
+* Be natural and conversational
+* Show curiosity or experience
+* React to a likely discussion topic
+* Avoid generic compliments
+* Avoid marketing language
+* Avoid sounding generated
+* Maximum 20 words
+* Exactly one sentence
 
 Return ONLY valid JSON.
 
 Example:
 
-{{
-    "industry": "Recruitment",
-    "language": "English",
-    "buyer_persona": "Recruiter, HR Manager",
-    "score": 92,
-    "reason": "Audience contains hiring decision makers."
-    "suggested_comment": "What hiring challenges are you seeing most often this year?"
-}}
+{
+"industry": "AI Automation",
+"language": "English",
+"buyer_persona": "Founder, CTO, AI Consultant",
+"popularity": "Large",
+"score": 88,
+"reason": "English livestream focused on AI automation with strong likelihood of attracting founders and technical decision makers.",
+"suggested_comment": "How are teams handling agent reliability once workflows become production critical?"
+}
 """
 
     gemini_models = [
