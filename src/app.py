@@ -1,8 +1,9 @@
 from src.crawler.meetup import crawl_meetup
-from src.crawler.youtube import crawl_youtube_live
 from src.ai.classify import classify_event
 from src.database.livestream_repository import save_event
+from src.youtube.crawler import crawl_youtube_live
 from src.youtube.livechat import get_live_chat_id, send_message
+from src.x_spaces.crawler import crawl_x_spaces
 
 
 def try_comment(event: dict):
@@ -42,9 +43,10 @@ def process_event(event: dict):
 
     event.update(classify_result)
 
-    save_event(event)
+    if event.get("score") >= 70:
+        save_event(event)
 
-    try_comment(event)
+    # try_comment(event)
 
     print("-" * 50)
     print(f"Title: {event['title']}")
@@ -63,7 +65,7 @@ def process_event(event: dict):
 
 def main():
     #  Định nghĩa danh sách các từ khóa cần tìm kiếm
-    keywords = ["Charity", "Tokenization", "Cross-border payment"]
+    keywords = ["ChatGPT", "n8n", "AI Agent", "Cursor", "Claude", "Gemini", "LangChain"]
 
     # meetup_events = crawl_meetup(keywords)
 
@@ -73,12 +75,17 @@ def main():
 
     # print(f"\n🎉 TỔNG SỐ EVENTS MEETUP TÌM ĐƯỢC: {len(meetup_events)}")
 
-    youtube_live_events = crawl_youtube_live(keywords, 3)
+    youtube_events = crawl_youtube_live(keywords, 3)
 
-    for event in youtube_live_events:
+    for event in youtube_events:
         process_event(event)
 
-    print(f"\n🎉 TỔNG SỐ EVENTS YOUTUBE LIVE TÌM ĐƯỢC: {len(youtube_live_events)}")
+    x_events = crawl_x_spaces(keywords, 3)
+
+    for event in x_events:
+        process_event(event)
+
+    print(f"🎉 YOUTUBE: {len(youtube_events)} | X SPACES: {len(x_events)}")
 
 
 if __name__ == "__main__":

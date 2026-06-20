@@ -92,3 +92,9 @@ token.json
 
 # Result Sheet
 *.xlsx
+
+# X Auth Sate
+x_state.json
+
+# Facebook Auth State
+facebook_state.json
