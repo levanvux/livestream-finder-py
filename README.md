@@ -28,7 +28,7 @@ TWITCH_CLIENT_SECRET=<client_secret ở bước trên>
 python -m src.twitch.auth
 ```
 
-3. Chạy file twitch/crawler.py để lấy live:
+4. Chạy file twitch/crawler.py để lấy live:
 
 ```bash
 python -m src.twitch.crawler
@@ -36,4 +36,4 @@ python -m src.twitch.crawler
 
 ---
 
-- Hiện tại link https://livestreamradar.streamlit.app không hoạt động được, đang trong quá trình xây dựng.
+** Hiện tại link https://livestreamradar.streamlit.app không hoạt động được, đang trong quá trình xây dựng. **
