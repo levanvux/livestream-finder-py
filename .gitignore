@@ -98,3 +98,6 @@ x_state.json
 
 # Facebook Auth State
 facebook_state.json
+
+# Twitch Auth State
+twitch_state.json
