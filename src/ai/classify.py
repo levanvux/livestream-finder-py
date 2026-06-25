@@ -7,7 +7,7 @@ exhausted_models = set()
 
 def classify_event(title: str, description: str):
     # Prompt cho Gemini:
-    # Phân tích livestream và trả về JSON: industry, language, buyer_persona, score, reason
+    # Phân tích livestream và trả về JSON: industry, language, buyer_persona, score, reason, suggested_comment
     #
     # score (0-100): Mức độ đáng tham gia để tìm khách hàng tiềm năng.
     prompt = f"""
@@ -47,7 +47,7 @@ Tasks:
 4. Estimate livestream popularity level
 5. Score opportunity from 0-100
 6. Explain the score
-7. Generate a natural viewer comment
+7. Generate a human-like natural viewer comment
 
 Important scoring rules:
 
@@ -140,7 +140,7 @@ Return ONLY valid JSON.
 
 Example:
 
-{
+{{
 "industry": "AI Automation",
 "language": "English",
 "buyer_persona": "Founder, CTO, AI Consultant",
@@ -148,7 +148,7 @@ Example:
 "score": 88,
 "reason": "English livestream focused on AI automation with strong likelihood of attracting founders and technical decision makers.",
 "suggested_comment": "How are teams handling agent reliability once workflows become production critical?"
-}
+}}
 """
 
     gemini_models = [
